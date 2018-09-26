@@ -24,6 +24,6 @@ urlpatterns = [
     url(r'^about/$', views.about),
     url(r'^contact/$', views.contact),
     url(r'^login/$', views.LoginFormView.as_view(), name='login'),
-    url(r'^signup/$', views.signup),
+    url(r'^signup/$', views.SignupFormView.as_view(), name='signup'),
     url(r'^admin/', admin.site.urls),
 ]
