@@ -34,29 +34,30 @@
     </ul>
   </div>
 </nav>
-<div id="main-login">
-		<div id='login-box' class="mx-auto pt-5">
-			<h1 style= "font-size: 50px; text-align: center" >Login</h1>
-			<form id="login-form" action = "/login", method = "POST">
+<div class="container text-dark" align="center">
+      <div class="starter-template">
+		<h3>Sign In</h3>
 
-				<!-- username field-->
-				<div class="form-group">
-					<label for="username">Username: </label><input class="form-control" type = "text" name = "username">
-				</div>
+		<form method="post">
+		{% csrf_token %}
+		{% for field in form %}
+		  <p>
+		    {{ field.label_tag }}
+		    {{ field }}
+		    {% if field.help_text %}
+		      <small style="color: grey">{{ field.help_text }}</small>
+		    {% endif %}
+		    {% for error in field.errors %}
+		      <p style="color: red">{{ error }}</p>
+		    {% endfor %}
+		  </p>
+		{% endfor %}
+		<button type="submit" class="btn btn-primary">Sign In</button>
+	  </form>
+	  <!--<a href="forgotpassword/">Forgot password?</a>-->
 
-				<!-- password field -->
-				<div class="form-group">
-					<label for="password">Password: </label><input class="form-control" type = "password" name = "password" >
-				</div>
-
-				<!-- Login button -->
-				<button class="button btn btn-lg btn-block btn-secondary" id="login-button"> Login </input>
-
-				</form>
-			</div>
-		</div>
-
-  </body>
+	  </div>
+    </div>
 
 
 <footer class="py-5 bg-dark fixed-bottom">

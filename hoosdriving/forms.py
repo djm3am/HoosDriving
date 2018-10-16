@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib import auth
 from django.contrib.auth.models import User
+from localflavor.us.forms import USZipCodeField, USStateSelect, USStateField
 
 class LoginForm(forms.Form):
     username = forms.CharField(label='Username or email')
@@ -23,11 +24,15 @@ class SignupForm(forms.ModelForm):
         model = User
         fields = ['first_name', 'last_name', 'username', 'email', 'password', 'confirm_password']
 
-    def __init__(self, security_question_list=None, state_employee_list=None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(SignupForm, self).__init__(*args, **kwargs)
         self.fields['first_name'].required = True
         self.fields['last_name'].required = True
         self.fields['email'].required = True
+        address = forms.CharField(max_length=254, required=True, help_text='Required')
+        state = USStateField(required=True, widget=USStateSelect(), help_text='Required')
+        city = forms.CharField(max_length=85, required=True, help_text='Required')
+        zip_code = USZipCodeField(required=True, help_text='Required')
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
