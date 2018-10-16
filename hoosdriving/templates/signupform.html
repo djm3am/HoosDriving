@@ -35,30 +35,32 @@
     </ul>
   </div>
 </nav>
-    <title>
-      Sign up
-    </title>
-    <div class="container text-dark" align="center">
-      <div class="starter-template">
-		<h3>Sign up!</h3>
-		<form method="post">
-    	  {% csrf_token %}
-    	  {% for field in form %}
-      	    <p>
-        	  {{ field.label_tag }}
-        	  {{ field }}
-        	  <!--{% if field.help_text %}-->
-          	    <!--<small style="color: grey">{{ field.help_text }}</small>-->
-          	  <!--{% endif %}-->
-        	  {% for error in field.errors %}
-          	    <p style="color: red">{{ error }}</p>
-        	  {% endfor %}
-      	    </p>
-    	  {% endfor %}
-    	  <button type="submit" class="btn btn-primary">Sign Up</button>
-  	 	</form>
-	  </div>
-    </div>
+    <div id="main-signUp">
+	<div id='login-box' class="container box">
+	<h1 style= "font-size: 50px; text-align: center" >Sign Up</h1>
+	<form id="login-form" action = "/login", method = "POST">
+		<div class = "form-group">
+			<label for="name">Name: </label>
+		<input class="form-control" type = "text" name = "name"></div>
+
+		<!-- username field-->
+		<div class="form-group">
+			<label for="username">Email: </label><input class="form-control" type = "text" name = "username">
+		</div>
+
+		<!-- password field -->
+		<div class="form-group">
+			<label for="password">Password: </label><input class="form-control" type = "password" name = "password" >
+		</div>
+
+		<div class="form-group">
+			<label for="password">Repeat Password: </label><input class="form-control" type = "password" name = "password" >
+		</div>
+		<!-- Login button -->
+		<button class="button btn btn-lg btn-block btn-secondary" id="login-button"> Sign Up </input>
+		</form>
+	</div>
+</div>
 
 </body>
 

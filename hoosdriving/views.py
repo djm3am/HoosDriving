@@ -7,6 +7,7 @@ from django.core.mail import EmailMessage
 from django.shortcuts import render, redirect
 from django.contrib.auth.password_validation import password_validators_help_texts, validate_password, get_password_validators
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from .settings import AUTH_PASSWORD_VALIDATORS
 
 def home(request):
     return render(request, 'home.html')
@@ -78,6 +79,27 @@ class SignupFormView(View):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             confirm_password = form.cleaned_data['confirm_password']
+
+            validators = get_password_validators(AUTH_PASSWORD_VALIDATORS)
+            flag = 0
+            for v in validators:
+                try:
+                    validate_password(password, password_validators=[v])
+                except forms.ValidationError:
+                    flag = 1
+                    form.add_error('password',
+                                   forms.ValidationError(_(password_validators_help_texts(password_validators=[v])[0])))
+
+            if flag == 1:
+                return render(request, self.template_name, {'form': form})
+
+            if password != confirm_password:
+                form.add_error('confirm_password',
+                               forms.ValidationError(_("Passwords do not match.  Please try again.")))
+                return render(request, self.template_name, {'form': form})
+
+            user.set_password(password)
+            user.save()
 
             user = authenticate(username=username, password=password)
             if user is not None:
