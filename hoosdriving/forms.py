@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib import auth
 from django.contrib.auth.models import User
+
+from django.contrib.auth.forms import UserCreationForm
 from localflavor.us.forms import USZipCodeField, USStateSelect, USStateField
 
 class LoginForm(forms.Form):
@@ -16,30 +18,34 @@ class ContactForm(forms.Form):
         label="Message"
     )
 
-class SignupForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput, required=True)
-    confirm_password = forms.CharField(widget=forms.PasswordInput, required=True)
+class SignupForm(UserCreationForm):
+    first_name = forms.CharField(max_length=40, required=True, help_text='Required')
+    last_name = forms.CharField(max_length=40, required=True, help_text='Required')
+    email = forms.EmailField(max_length=254, required=True, help_text='Required')
+    address = forms.CharField(max_length=254, required=True, help_text='Required')
+    state = USStateField(required=True, widget=USStateSelect(), help_text='Required')
+    city = forms.CharField(max_length=85, required=True, help_text='Required')
+    zip_code = USZipCodeField(required=True, help_text='Required')
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'password', 'confirm_password']
-
-    def __init__(self, *args, **kwargs):
-        super(SignupForm, self).__init__(*args, **kwargs)
-        self.fields['first_name'].required = True
-        self.fields['last_name'].required = True
-        self.fields['email'].required = True
-        address = forms.CharField(max_length=254, required=True, help_text='Required')
-        state = USStateField(required=True, widget=USStateSelect(), help_text='Required')
-        city = forms.CharField(max_length=85, required=True, help_text='Required')
-        zip_code = USZipCodeField(required=True, help_text='Required')
+        fields = ('username', 'password1', 'password2', 'first_name',
+                  'last_name', 'email')
 
     def clean_email(self):
-        email = self.cleaned_data.get('email')
-        username = self.cleaned_data.get('username')
-        if email and User.objects.filter(email=email).exclude(username=username).count():
-            raise forms.ValidationError(_("This email address is already in use. Please supply a different email address."))
-
-        if email == '':
-            raise forms.ValidationError(_("Email cannot be blank.  Please supply an email address."))
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).count() > 0:
+            raise forms.ValidationError("A user with that email already exists.")
         return email
+
+    def clean_first_name(self):
+        first_name = self.cleaned_data['first_name']
+        return first_name
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data['last_name']
+        return last_name
+
+    def clean_city(self):
+        city = self.cleaned_data['city']
+        return city
