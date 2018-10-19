@@ -40,12 +40,24 @@ class SignupForm(UserCreationForm):
 
     def clean_first_name(self):
         first_name = self.cleaned_data['first_name']
+        for character in first_name:
+            if character in "!@#$%^&*()~,./?;:1234567890}{<>-+=":
+                print('{field} contains {character}')
+                raise forms.ValidationError('You included a number or special character in a name or city field')
         return first_name
 
     def clean_last_name(self):
         last_name = self.cleaned_data['last_name']
+        for character in last_name:
+            if character in "!@#$%^&*()~,./?;:1234567890}{<>-+=":
+                print('{field} contains {character}')
+                raise forms.ValidationError('You included a number or special character in a name or city field')
         return last_name
 
     def clean_city(self):
         city = self.cleaned_data['city']
+        for character in city:
+            if character in "!@#$%^&*()~,./?;:1234567890}{<>-+=":
+                print('{field} contains {character}')
+                raise forms.ValidationError('You included a number or special character in a name or city field')
         return city
