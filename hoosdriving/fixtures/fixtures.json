@@ -1,0 +1,47 @@
+[
+{
+    "model": "Profile",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$3Jpwwi7Igtxf$PLOr3q/k0Y6TIDrBcMvErC2Ja7ReuVgWmZ3IDZjPIKo=",
+        "username": "admin",
+        "first_name": "Admin",
+        "last_name": "Admin",
+        "email": "admin@email.com",
+        "address": "123 street lane",
+        "state": "Virginia",
+        "city": "Charlottesville",
+        "zipcode": "22903"
+    }
+},
+{
+    "model": "Profile",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$3Jpwwi7Igtxf$PLOr3q/k0Y6TIDrBcMvErC2Ja7ReuVgWmZ3IDZjPIKo=",
+        "username": "user2",
+        "first_name": "User2",
+        "last_name": "User2",
+        "email": "user2@email.com",
+        "address": "123 street lane",
+        "state": "Virginia",
+        "city": "Charlottesville",
+        "zipcode": "22903"
+    }
+},
+    {
+    "model": "Profile",
+    "pk": 10,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$3Jpwwi7Igtxf$PLOr3q/k0Y6TIDrBcMvErC2Ja7ReuVgWmZ3IDZjPIKo=",
+        "username": "user",
+        "first_name": "User",
+        "last_name": "User",
+        "email": "user@email.com",
+        "address": "123 street lane",
+        "state": "Virginia",
+        "city": "Charlottesville",
+        "zipcode": "22903"
+    }
+}
+]

@@ -19,13 +19,13 @@ class ContactForm(forms.Form):
     )
 
 class SignupForm(UserCreationForm):
-    first_name = forms.CharField(max_length=40, required=True, help_text='Required')
-    last_name = forms.CharField(max_length=40, required=True, help_text='Required')
-    email = forms.EmailField(max_length=254, required=True, help_text='Required')
-    address = forms.CharField(max_length=254, required=True, help_text='Required')
-    state = USStateField(required=True, widget=USStateSelect(), help_text='Required')
-    city = forms.CharField(max_length=85, required=True, help_text='Required')
-    zip_code = USZipCodeField(required=True, help_text='Required')
+    first_name = forms.CharField(max_length=40, required=True)
+    last_name = forms.CharField(max_length=40, required=True)
+    email = forms.EmailField(max_length=254, required=True)
+    address = forms.CharField(max_length=254, required=True)
+    state = USStateField(required=True, widget=USStateSelect())
+    city = forms.CharField(max_length=85, required=True)
+    zip_code = USZipCodeField(required=True)
 
     class Meta:
         model = User
@@ -61,3 +61,79 @@ class SignupForm(UserCreationForm):
                 print('{field} contains {character}')
                 raise forms.ValidationError('You included a number or special character in a name or city field')
         return city
+
+
+class ForgotPasswordForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['email']
+
+    def __init__(self, *args, **kwargs):
+        super(ForgotPasswordForm, self).__init__(*args, **kwargs)
+        self.fields['email'].required = True
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+
+        if email == '':
+            raise forms.ValidationError(_("Email cannot be blank.  Please supply an email address."))
+        return email
+
+
+class SecurityQuestionForm(forms.Form):
+    security_answer = forms.CharField(required=True)
+
+    class Meta:
+        fields = ['security_answer']
+
+
+class ResetPasswordForm(forms.Form):
+    password = forms.CharField(widget=forms.PasswordInput, required=True)
+    confirm_password = forms.CharField(widget=forms.PasswordInput, required=True)
+
+    class Meta:
+        fields = ['password', 'confirm_password']
+
+
+class UpdateUserProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
+
+
+class ChangeUsernameForm(forms.ModelForm):
+    username = forms.CharField(required=True)
+
+    class Meta:
+        model = User
+        fields = ['username']
+
+
+
+class ValidatingPasswordChangeForm(auth.forms.PasswordChangeForm):
+    min_length = 8
+
+    def clean_new_password1(self):
+        min_length = 8
+        upper = False
+        lower = False
+        digit = False
+        password = self.cleaned_data.get('new_password1')
+
+        if len(password) < min_length:
+            raise forms.ValidationError(_("Password must be at least 8 characters long."))
+
+        for c in password:
+            if c.isupper():
+                upper = True
+            if c.isalpha() and not c.isupper():
+                lower = True
+            if c.isdigit():
+                digit = True
+
+        if not (upper and lower and digit):
+            raise forms.ValidationError(
+                _("Password must contain at least one uppercase letter, one lowercase letter, and one digit."))
+
+        return password

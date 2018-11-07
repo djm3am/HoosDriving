@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'hoosdriving.apps.hoosdrivingConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +44,8 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'django_countries',
 ]
+
+BITCOIND_CONNECTION_STRING = "http://bitcoinuser:password@localhost:8332"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
