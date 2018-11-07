@@ -22,9 +22,10 @@ from django.contrib.auth.password_validation import password_validators_help_tex
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
-
+from django.core.mail import EmailMessage
 from django.conf import settings
 from .bitpay import Bitpay
+from django.template.loader import get_template
 
 def home(request):
     return render(request, 'home.html')
@@ -43,7 +44,7 @@ def contact(request):
             content = form.cleaned_data['content']
             email = EmailMessage(contact_name, content, contact_email, ['djm3am@virginia.edu'], reply_to=[contact_email])
             email.send()
-            return redirect('')
+            return redirect('/')
     return render(request, 'contact.html', {'form': form})
 
 class LoginFormView(View):
